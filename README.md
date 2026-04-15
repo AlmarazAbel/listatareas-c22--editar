@@ -1,18 +1,48 @@
-# React + Vite
+# 📝 Lista de Tareas
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Una aplicación web sencilla e intuitiva para gestionar y organizar tus tareas diarias.
 
-Currently, two official plugins are available:
+## 🚀 Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Puedes ver el proyecto funcionando aquí: **[Enlace al Demo](#)**
 
-## React Compiler
+## 🛠️ Tecnologías y Librerías
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- **React**
+- **[Bootstrap 5](https://getbootstrap.com/)**
+- **[React-icons](https://react-icons.github.io/react-icons/)**
 
-Note: This will impact Vite dev & build performances.
+## ⚙️ Instalación y Uso
 
-## Expanding the ESLint configuration
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/rollingcodeschool/listaTareas-c22
+   ```
+2. Navega a la carpeta del proyecto, instala las dependencies y ejecuta el proyecto:
+   ```bash
+   cd 12-listaTareas
+   npm install
+   npm run dev
+   ```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📂 Estructura del Proyecto
+
+```text
+12-listaTareas/
+├── index.html      # Estructura principal
+├── src
+    └──  components # componentes del proyecto
+        ├── Footer.jsx
+        ├── FormularioTarea.jsx
+        ├── ItemTarea.jsx
+        ├── ListaTarea.jsx
+        └── Navbar.jsx
+    ├── App.jsx
+    ├── main.jsx
+    └── index.css  # Hoja de estilos
+└── README.md       # Documentación del proyecto
+```
+
+## 👩‍💻 Autora
+
+Desarrollado por **[Emilse Andrea Arias](https://github.com/emiarias)**
