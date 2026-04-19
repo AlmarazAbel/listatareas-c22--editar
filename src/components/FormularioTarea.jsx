@@ -21,6 +21,15 @@ const FormularioTarea = () => {
     //limpiar el form
     setTarea('')
   }
+
+//logica del componente
+const borrarTarea = (nombreTarea)=>{
+const tareasFiltradas = listaTareas.filter((item)=>item !== nombreTarea)
+//actualizar el state
+setListaTareas(tareasFiltradas)
+}
+
+
   return (
     <section>
       <form onSubmit={handleSubmit}>
@@ -36,7 +45,7 @@ const FormularioTarea = () => {
           <button className="btn btn-primary">Enviar</button>
         </div>
       </form>
-      <ListaTarea listaTareas={listaTareas}></ListaTarea>
+      <ListaTarea listaTareas={listaTareas} borrarTarea={borrarTarea}></ListaTarea>
     </section>
   );
 };
