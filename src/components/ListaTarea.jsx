@@ -1,12 +1,15 @@
 import ItemTarea from "./ItemTarea";
 
-const ListaTarea = () => {
+const ListaTarea = ({listaTareas}) => {
   return (
     <ul className="list-group">
-     <ItemTarea></ItemTarea>
-     <ItemTarea></ItemTarea>
-     <ItemTarea></ItemTarea>
-     <ItemTarea></ItemTarea>
+
+      {
+        listaTareas.map((item,indice)=><ItemTarea key={indice} item={item}></ItemTarea>)
+
+      }
+     
+   
     </ul>
   );
 };

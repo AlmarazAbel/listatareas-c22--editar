@@ -1,7 +1,7 @@
-const ItemTarea = () => {
+const ItemTarea = ({item}) => {
   return (
     <li className="list-group-item d-flex justify-content-between align-items-center">
-      tarea <button className="btn btn-danger">Borrar</button>
+      {item} <button className="btn btn-danger">Borrar</button>
     </li>
   );
 };

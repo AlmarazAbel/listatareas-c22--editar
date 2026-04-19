@@ -36,7 +36,7 @@ const FormularioTarea = () => {
           <button className="btn btn-primary">Enviar</button>
         </div>
       </form>
-      <ListaTarea></ListaTarea>
+      <ListaTarea listaTareas={listaTareas}></ListaTarea>
     </section>
   );
 };
