@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import ListaTarea from "./ListaTarea";
+import ItemTarea from "./ItemTarea";
 
 const FormularioTarea = () => {
 
@@ -9,10 +10,13 @@ const FormularioTarea = () => {
 
   const handleSubmit = (e)=>{
     e.preventDefault()
-
-    //agregar tarea al arrat
-
-    setListaTareas([...listaTareas,tarea])
+    const tareaBuscada = listaTareas.find((itemTarea)=> itemTarea.toLocaleLowerCase() === tarea.toLocaleLowerCase())
+    console.log(tareaBuscada)
+    if(tareaBuscada){
+      return alert('la tarea ya existe')
+    }
+    //agregar tarea al array
+    setListaTareas([...listaTareas,tarea.trim()])
 
     //limpiar el form
     setTarea('')
