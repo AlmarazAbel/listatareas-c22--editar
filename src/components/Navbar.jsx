@@ -1,3 +1,6 @@
+import { LuSun } from "react-icons/lu";
+
+
 const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -65,7 +68,7 @@ const Navbar = () => {
               </a>
             </li>
           </ul>
-          <button className="btn btn-outline-primary">Tema</button>
+          <button className="btn btn-outline-ligth"><LuSun></LuSun></button>
         </div>
       </div>
     </nav>
