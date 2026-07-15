@@ -1,17 +1,16 @@
 import ItemTarea from "./ItemTarea";
 
-// 1. Recibimos "habilitarEdicion" en las props destructuradas
 const ListaTarea = ({ listaTareas, borrarTarea, habilitarEdicion }) => {
   return (
     <ul className="list-group">
       {
-        listaTareas.map((item, indice) => (
+        listaTareas.map((tarea, indice) => (
           <ItemTarea 
-            key={indice} 
-            item={item} 
-            index={indice} // 2. Pasamos el índice (posición en el array)
+            key={tarea._id} // Usamos el id de MongoDB como key única
+            item={tarea} 
+            index={indice} 
             borrarTarea={borrarTarea} 
-            habilitarEdicion={habilitarEdicion} // 3. Le pasamos la función a ItemTarea
+            habilitarEdicion={habilitarEdicion} 
           />
         ))
       }

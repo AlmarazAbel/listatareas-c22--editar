@@ -1,24 +1,41 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ListaTarea from "./ListaTarea";
 
+// URL de tu Backend (Modifícala si tu puerto o ruta es diferente)
+
+const URL_API = import.meta.env.VITE_URL_API;
 const FormularioTarea = () => {
   const [listaTareas, setListaTareas] = useState([]);
   const [tarea, setTarea] = useState('');
-  
-  // NUEVOS ESTADOS: Para saber si estamos editando y qué índice estamos editando
   const [editando, setEditando] = useState(false);
   const [indiceEditando, setIndiceEditando] = useState(null);
 
-  const handleSubmit = (e) => {
+  // 1. CARGAR TAREAS AL INICIAR: Consultamos la API cuando se monta el componente
+  useEffect(() => {
+    obtenerTareas();
+  }, []);
+
+  const obtenerTareas = async () => {
+    try {
+      const respuesta = await fetch(URL_API);
+      if (respuesta.ok) {
+        const datos = await respuesta.json();
+        setListaTareas(datos); // Guardamos el array de objetos que viene de la base de datos
+      }
+    } catch (error) {
+      console.error("Error al conectar con la API:", error);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const tareaLimpia = tarea.trim();
-
     if (tareaLimpia === '') return;
 
-    // Validar si la tarea ya existe (ignorando la que estamos editando actualmente)
+    // Validar si la tarea ya existe en el estado local (ignorando la que estamos editando)
     const tareaExiste = listaTareas.some(
       (itemTarea, index) => 
-        itemTarea.toLowerCase() === tareaLimpia.toLowerCase() && 
+        itemTarea.nombreTarea.toLowerCase() === tareaLimpia.toLowerCase() && 
         (!editando || index !== indiceEditando)
     );
 
@@ -26,42 +43,66 @@ const FormularioTarea = () => {
       return alert('La tarea ya existe');
     }
 
-    if (editando) {
-      // --- MODO EDICIÓN ---
-      const nuevasTareas = [...listaTareas];
-      nuevasTareas[indiceEditando] = tareaLimpia;
-      setListaTareas(nuevasTareas);
-      
-      // Resetear estados de edición
-      setEditando(false);
-      setIndiceEditando(null);
-    } else {
-      // --- MODO CREACIÓN ---
-      setListaTareas([...listaTareas, tareaLimpia]);
-    }
+    try {
+      if (editando) {
+        // --- MODO EDICIÓN (PUT) ---
+        const tareaAEditar = listaTareas[indiceEditando];
+        const respuesta = await fetch(`${URL_API}/${tareaAEditar._id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nombreTarea: tareaLimpia }) // Cambia 'nombreTarea' si tu backend usa otro nombre
+        });
 
-    // Limpiar el input
-    setTarea('');
+        if (respuesta.ok) {
+          obtenerTareas(); // Recargamos de la base de datos para ver los cambios
+          setEditando(false);
+          setIndiceEditando(null);
+        }
+      } else {
+        // --- MODO CREACIÓN (POST) ---
+        const respuesta = await fetch(URL_API, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nombreTarea: tareaLimpia })
+        });
+
+        if (respuesta.ok) {
+          obtenerTareas(); // Recargamos la lista actualizada
+        }
+      }
+      setTarea(''); // Limpiamos el input
+    } catch (error) {
+      console.error("Error al procesar la tarea:", error);
+    }
   };
 
-  const borrarTarea = (nombreTarea) => {
-    const tareasFiltradas = listaTareas.filter((item) => item !== nombreTarea);
-    setListaTareas(tareasFiltradas);
-    
-    // Si borramos la tarea que estábamos editando, cancelamos la edición
-    if (editando && listaTareas[indiceEditando] === nombreTarea) {
-      cancelarEdicion();
+  // --- BORRAR TAREA (DELETE) ---
+  const borrarTarea = async (idTarea) => {
+    const confirmar = window.confirm("¿Seguro que quieres eliminar esta tarea?");
+    if (!confirmar) return;
+
+    try {
+      const respuesta = await fetch(`${URL_API}/${idTarea}`, {
+        method: "DELETE"
+      });
+
+      if (respuesta.ok) {
+        obtenerTareas(); // Recargamos tras eliminar
+        if (editando && listaTareas[indiceEditando]._id === idTarea) {
+          cancelarEdicion();
+        }
+      }
+    } catch (error) {
+      console.error("Error al eliminar la tarea:", error);
     }
   };
 
-  // NUEVA FUNCIÓN: Se ejecutará cuando el usuario haga clic en "Editar" desde la lista
   const habilitarEdicion = (nombreTarea, index) => {
     setTarea(nombreTarea);
     setEditando(true);
     setIndiceEditando(index);
   };
 
-  // NUEVA FUNCIÓN: Por si el usuario quiere arrepentirse de editar
   const cancelarEdicion = () => {
     setTarea('');
     setEditando(false);
@@ -71,7 +112,7 @@ const FormularioTarea = () => {
   return (
     <section>
       <form onSubmit={handleSubmit}>
-        <div className="mb-3 d-flex gap-2"> {/* Agregado gap-2 para separar los botones */}
+        <div className="mb-3 d-flex gap-2">
           <input
             type="text"
             className="form-control"
@@ -81,8 +122,6 @@ const FormularioTarea = () => {
             value={tarea}
             required
           />
-          
-          {/* Si está editando, mostramos "Guardar" y el botón de "Cancelar" al lado */}
           {editando ? (
             <>
               <button className="btn btn-warning" type="submit">Guardar</button>
@@ -95,8 +134,6 @@ const FormularioTarea = () => {
           )}
         </div>
       </form>
-      
-      {/* Pasamos la función habilitarEdicion al componente ListaTarea */}
       <ListaTarea 
         listaTareas={listaTareas} 
         borrarTarea={borrarTarea} 
