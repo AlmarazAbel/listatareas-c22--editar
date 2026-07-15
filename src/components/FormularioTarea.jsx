@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import ListaTarea from "./ListaTarea";
+import ItemTarea from "./ItemTarea";
 
-// URL de tu Backend (Modifícala si tu puerto o ruta es diferente)
-const URL_API = "http://localhost:4000/api/tareas"; 
-
+const URL_API = import.meta.env.VITE_URL_API;
 const FormularioTarea = () => {
   const [listaTareas, setListaTareas] = useState([]);
   const [tarea, setTarea] = useState('');
